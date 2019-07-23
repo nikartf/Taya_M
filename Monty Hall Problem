@@ -1,0 +1,41 @@
+import random
+import pandas as pd
+import numpy as np
+%matplotlib inline
+import matplotlib.pyplot as plt
+import seaborn as sns
+stay_wins = 0
+switch_wins = 0
+doors = [1, 2, 3]
+stay_wins_data = []
+switch_wins_data = []
+games = range(1,1001)
+
+for num_simulations in games:
+    prize_door = np.random.choice(doors) # randomly choose prize_door
+    chosen_door = np.random.choice(doors) # randomly choose initial door guessed
+    opened_door = np.random.choice(list(set(doors) - set([prize_door, chosen_door]))) # door opened by monty
+    switch_door = (set(doors) - set([chosen_door, opened_door])).pop()
+    if chosen_door == prize_door:
+        stay_wins += 1
+    stay_wins_data.append(float(stay_wins) / float(num_simulations))
+
+    if switch_door == prize_door:
+        switch_wins += 1
+    switch_wins_data.append(float(switch_wins) / float(num_simulations))
+    
+print( 'Switching won', switch_wins / games[-1]*100, '% of the time' )
+print( 'Staying won', stay_wins / games[-1]*100, '% of the time' )
+
+plt.ylabel('Probability')
+plt.xlabel('Number of iterations')
+plt.grid(True)
+plt.plot(games, stay_wins_data, label="Staying won")
+plt.plot(games, switch_wins_data, label="Switching won")
+plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+
+plt.show()
+
+Conclusion
+Our simulation shows that winning happens in around 70% of cases when switching and in around 30% of cases when staying. 
+Thus, switching gives more chances to win.
